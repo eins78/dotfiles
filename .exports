@@ -11,3 +11,6 @@ export HISTFILESIZE=$HISTSIZE
 export HISTCONTROL=ignoredups
 # Make some commands not show up in history
 export HISTIGNORE="ls:cd:cd -:pwd:exit:date:* --help"
+
+# Silence macOS bash deprecation warning (not switching to zsh)
+export BASH_SILENCE_DEPRECATION_WARNING=1
