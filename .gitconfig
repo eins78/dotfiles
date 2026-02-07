@@ -114,3 +114,17 @@
 
 #[includeIf "gitdir:~/some_namespace/"]
 #  path = ~/some_namespace/.gitconfig
+
+# SSH commit signing
+[gpg]
+	format = ssh
+[user]
+	name = Max Albrecht
+	email = 1@178.is
+	signingkey = ~/.ssh/id_ed25519_signing.pub
+[commit]
+	gpgsign = true
+[tag]
+	gpgsign = true
+[gpg "ssh"]
+	allowedSignersFile = ~/.ssh/allowed_signers
