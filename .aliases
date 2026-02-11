@@ -136,3 +136,26 @@ alias dc="docker compose"
 alias sshyolo="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o GlobalKnownHostsFile=/dev/null"
 alias scpyolo="scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o GlobalKnownHostsFile=/dev/null"
 alias pdf2booklet='docker run --rm -v $(pwd):/data -w /data -u $(id -u):$(id -g) bookletimposer --no-gui --booklet'
+
+alias marked="open -a /Applications/Marked\ 2.app"
+alias uuids="for i in {1..16}; do uuidgen | tr '[:upper:]' '[:lower:]'; done | column"
+alias hq="htmlq --pretty | bat --no-pager --language html"
+alias redirectstderr-stdout="echo use '2>&1'"
+
+# git shortcuts
+alias gc="git clean -fdX; git clean -fdX; git clean -fdX"
+alias gf="git fetch"
+alias gr="git root"
+
+# project workflow (na = ni agent-based runner)
+alias build="na install && husky-disable && na run build"
+alias dev="na install && husky-disable && na run dev"
+alias watch="na install && husky-disable && na run watch"
+alias serve="na install && husky-disable && na run serve"
+alias dist="na install && husky-disable && na run dist"
+alias ci="na install && husky-disable && na run ci"
+alias cbuild="gc && build"
+alias cdist="gc && dist"
+alias cci="gc && ci"
+alias cdev="gc && dev"
+alias husky-disable="git config --unset core.hooksPath || true"

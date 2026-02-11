@@ -21,36 +21,47 @@
 	remotes = remote -v
 	# Credit an author on the latest commit
 	credit = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
+	root = "!f() { cd \"$(git rev-parse --show-toplevel)\"; }; f"
 
-  WIP = "!f() { git add -A && git commit --no-verify -m \"[WIP] $(git branch --show-current)\"; }; f"
-  WIPP = !git wip && git push
-  UNWIP = "!f() { git log -n1 --format="%s" | grep -qe 'WIP' && git reset --keep --mixed HEAD^1 || echo 'FATAL: not on a WIP commit!'; }; f"
+	sw = switch
+	f = fetch
+	bva = branch -va --sort=-committerdate
 
-  amend = commit --amend
-  # Interactive rebase with the given number of latest commits
+	WIP = "!f() { git add -A && git commit --no-verify -m \"[WIP] $(git branch --show-current)\"; }; f"
+	WIPP = !git wip && git push
+	UNWIP = "!f() { git log -n1 --format="%s" | grep -qe 'WIP' && git reset --keep --mixed HEAD^1 || echo 'FATAL: not on a WIP commit!'; }; f"
+
+	amend = commit --amend
+	# Interactive rebase with the given number of latest commits
 	reb = "!r() { git rebase -i --autostash --autosquash HEAD~$1; }; r"
-  rbc = rebase --continue
-  rba = rebase --abort
-  
-  pick = "cherry-pick"
-  pfush = "push -f"
-  
-  # Undo a `git push`
+	rbc = rebase --continue
+	rba = rebase --abort
+
+	pick = "cherry-pick"
+	pfush = "push --force-with-lease"
+
+	# Undo a `git commit`
+	undocommit = reset --soft HEAD^
+	# Undo a `git push`
 	undopush = push -f origin HEAD^:master
 	surfi = !git submodule update --recursive --force --init
 	# push&pull
 	sync = !git pull && git push && git surfi
-	well-actually = "!f() { git add -u . && git commit --amend --no-edit && git push -f; }; f"
+	well-actually = "!f() { git add -u . && git commit --amend --no-edit --no-verify && git push -f; }; f"
 	remote-default-branch = "!f() { git remote show origin | grep 'HEAD branch' | cut -d':' -f2 | cut -d' ' -f2; }; f"
 	deliver = "!f() { git push origin \"$1:$(git remote-default-branch)\"; }; f"
-  conflicts = "diff --name-only --diff-filter=U"
+	conflicts = "diff --name-only --diff-filter=U"
+
+	# Branch start workflow
+	start = "!f() { git fetch --quiet && git switch --no-guess --force-create \"$1\" \"$(git rev-parse origin/HEAD)\"; }; f"
+	startt = "!f() { git start \"$1\"; osascript ~/bin/timingapp-start-timer.applescript 'Development' \"$1\"; }; f"
+	start-worktree = "!f() { cd \"$(git rev-parse --show-toplevel)\" && git worktree add .worktrees/\"$1\" && cd .worktrees/\"$1\" && git start \"$1\"; }; f"
 
 [apply]
 	# Detect whitespace errors when applying a patch
 	whitespace = warn
 
 [core]
-	editor = code --wait
 	# Use custom `.gitignore` and `.gitattributes`
 	excludesfile = ~/.gitignore
 	attributesfile = ~/.gitattributes
@@ -97,34 +108,19 @@
 	insteadOf = "gist:"
 
 [push]
-	#default = simple
-
-[merge "npm-merge-driver"]
-	name = automatically merge npm lockfiles
-	driver = npx npm-merge-driver merge %A %O %B %P
-
-[push]
 	default = current
-[advice]
-	detachedHead = false
+[tag]
+	sort = version:refname
 [branch]
 	sort = -committerdate
 [pull]
 	ff = only
+[advice]
+	skippedCherryPicks = false
+[http]
+	postBuffer = 524288000
 
-#[includeIf "gitdir:~/some_namespace/"]
-#  path = ~/some_namespace/.gitconfig
-
-# SSH commit signing
-[gpg]
-	format = ssh
-[user]
-	name = Max Albrecht
-	email = 1@178.is
-	signingkey = ~/.ssh/id_ed25519_signing.pub
-[commit]
-	gpgsign = true
-[tag]
-	gpgsign = true
-[gpg "ssh"]
-	allowedSignersFile = ~/.ssh/allowed_signers
+# Machine-specific config (user identity, signing, paths)
+# Not tracked — each machine maintains its own ~/.gitconfig.local
+[include]
+	path = ~/.gitconfig.local
