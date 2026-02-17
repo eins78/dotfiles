@@ -21,7 +21,7 @@ alias o="open"
 alias oo="open ."
 
 # tongue-in-cheek ai shortcuts
-alias agi="claude --model default --allow-dangerously-skip-permissions --append-system-prompt \"Current time is: $(date).\""
+alias agi="PATH=/opt/homebrew/bin:\$PATH claude --model default --allow-dangerously-skip-permissions --append-system-prompt \"Current time is: \$(date).\""
 alias skynet="agi --dangerously-skip-permissions"
 
 # Detect which `ls` flavor is in use
