@@ -27,7 +27,8 @@ agi() {
     --append-system-prompt "$(cat <<EOF
 Session context:
 - Date: $(date '+%Y-%m-%d %H:%M %Z')
-- User: $(whoami)@$(hostname -s)
+- User: $(whoami)
+- Hostname: $(hostname -s)
 EOF
 )" "$@"
 }
