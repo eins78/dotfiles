@@ -21,7 +21,16 @@ alias o="open"
 alias oo="open ."
 
 # tongue-in-cheek ai shortcuts
-alias agi="PATH=/opt/homebrew/bin:\$PATH claude --model default --allow-dangerously-skip-permissions --append-system-prompt \"Current time is: \$(date).\""
+unalias agi 2>/dev/null
+agi() {
+  PATH=/opt/homebrew/bin:$PATH claude --model default --allow-dangerously-skip-permissions \
+    --append-system-prompt "$(cat <<EOF
+Session context:
+- Date: $(date '+%Y-%m-%d %H:%M %Z')
+- User: $(whoami)@$(hostname -s)
+EOF
+)" "$@"
+}
 alias skynet="agi --dangerously-skip-permissions"
 
 # Detect which `ls` flavor is in use
