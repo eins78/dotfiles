@@ -2,7 +2,7 @@
 *.pyc
 
 /.worktrees
-/.claude/worktree
+/.claude/worktrees
 
 # Folder view configuration files
 .DS_Store
