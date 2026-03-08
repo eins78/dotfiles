@@ -141,6 +141,9 @@ alias stfu="osascript -e 'set volume output muted true'"
 alias pumpitup="osascript -e 'set volume 7'"
 alias hax="growlnotify -a 'Activity Monitor' 'System error' -m 'WTF R U DOIN'"
 
+# neofetch → fastfetch
+alias neofetch="fastfetch"
+
 # eins78 / KTE aliases
 alias dc="docker compose"
 alias sshyolo="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o GlobalKnownHostsFile=/dev/null"
