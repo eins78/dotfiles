@@ -14,3 +14,9 @@ export HISTIGNORE="ls:cd:cd -:pwd:exit:date:* --help"
 
 # Silence macOS bash deprecation warning (not switching to zsh)
 export BASH_SILENCE_DEPRECATION_WARNING=1
+
+# Claude Code: pin auto-updater off so macOS TCC permissions don't reset on every release.
+# Each `claude` release lands at ~/.local/share/claude/versions/<v>/ and TCC is path-keyed,
+# so an auto-update orphans every prior grant. See anthropics/claude-code#49282 / #54691.
+# Bump manually with `claude update` (which DISABLE_UPDATES would also block; we only block auto).
+export DISABLE_AUTOUPDATER=1
