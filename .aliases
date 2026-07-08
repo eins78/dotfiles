@@ -23,7 +23,7 @@ alias oo="open ."
 # tongue-in-cheek ai shortcuts
 unalias agi 2>/dev/null
 agi() {
-  PATH=/opt/homebrew/bin:$PATH claude --model default --allow-dangerously-skip-permissions \
+  PATH=/opt/homebrew/bin:$PATH claude --model default --permission-mode auto --allow-dangerously-skip-permissions \
     --append-system-prompt "$(cat <<EOF
 Session context:
 - Date: $(date '+%Y-%m-%d %H:%M %Z')
