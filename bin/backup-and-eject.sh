@@ -16,9 +16,14 @@ LOG_FILE="$HOME/Library/Logs/auto-backup.log"
 LOCK_FILE="/tmp/tm-backup.lock"
 
 POLL_INTERVAL=180                  # check every 3 min
-TRIGGER_INTERVAL=600               # re-issue startbackup at most every 10 min
+TRIGGER_INTERVAL=180               # retry startbackup every poll until the first backup takes.
+                                   # Only fires while idle with no backup observed yet; startbackup
+                                   # is a no-op once one is running. Was 600s — too coarse; an
+                                   # unattended replug could sit idle up to 10 min before starting.
 MAX_WAIT_SECONDS=$((6 * 60 * 60))  # give up after 6h with no fresh backup
-INITIAL_MOUNT_WAIT=10              # let the mount settle before first check
+INITIAL_MOUNT_WAIT=60              # let backupd register the destination before the FIRST trigger.
+                                   # 10s lost the early-mount race → BACKUP_FAILED_TARGETVOL_NOT_FOUND
+                                   # (18); backupd needs >30s on this hardware. Jul 27 2026.
 
 log() {
     echo "$(date '+%Y-%m-%d %H:%M:%S'): $1" >> "$LOG_FILE"
