@@ -21,6 +21,12 @@
 # out). A sufficiently indirect command can still get through. It raises the
 # floor; it does not make the constraint unreachable.
 #
+# ORDERING: this is the SECOND hook on the global PreToolUse/Bash matcher;
+# pre-commit-check.sh runs first and also exits 2 (for `git commit` outside a
+# repo). The two never overlap — different commands, different conditions — but
+# if Claude Code short-circuits on the first non-zero exit, order would matter.
+# Nothing else documents that, hence this note.
+#
 # FAIL OPEN, ALWAYS. This runs PreToolUse on every Bash call in every session
 # on this machine, including homebot's own. A crash here that exited non-zero
 # would block all shell use. So: no `set -e`, no `set -u`, no pipefail, and
