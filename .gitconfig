@@ -124,3 +124,5 @@
 # Not tracked — each machine maintains its own ~/.gitconfig.local
 [include]
 	path = ~/.gitconfig.local
+[url "git@ssh.bitbucket.org:"]
+	insteadOf = git@bitbucket.org:
