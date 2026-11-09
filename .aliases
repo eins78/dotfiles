@@ -163,13 +163,16 @@ alias scpyolo="scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -
 alias pdf2booklet='docker run --rm -v $(pwd):/data -w /data -u $(id -u):$(id -g) bookletimposer --no-gui --booklet'
 
 # one `open` per file: a single `open -a` with several files opens none of them in Marked 2
+# focuses Marked 2 by default; `marked -g files...` or `markedg files...` opens in the background
 unalias marked 2>/dev/null
 marked() {
-  local f
+  local bg=() f
+  if [ "$1" = "-g" ]; then bg=(-g); shift; fi
   for f in "$@"; do
-    open -g -a "Marked 2" "$f"
+    open "${bg[@]}" -a "Marked 2" "$f"
   done
 }
+markedg() { marked -g "$@"; }
 alias uuids="for i in {1..16}; do uuidgen | tr '[:upper:]' '[:lower:]'; done | column"
 alias hq="htmlq --pretty | bat --no-pager --language html"
 alias redirectstderr-stdout="echo use '2>&1'"
