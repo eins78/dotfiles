@@ -22,20 +22,8 @@ alias oo="open ."
 
 # tongue-in-cheek ai shortcuts
 unalias agi 2>/dev/null
-agi() (
-  # Subshell: the agent GitHub identity (gh shim + App token helper, no stored gh login) lives only in this process
-  # tree, not in the interactive shell. env.sh must come after PATH so the shim stays first. If env.sh is missing the
-  # session still starts, but fails closed: an empty gh config and no keychain git credential for github.com, so it
-  # never falls back to Max's stored login.
-  export PATH=/opt/homebrew/bin:$PATH
-  # shellcheck source=/dev/null
-  if ! source "${GH_AGENT_HOME:-$HOME/OPS/home-workspace}/scripts/gh-agent/env.sh" 2>/dev/null; then
-    echo "agi: gh-agent env.sh not found; starting WITHOUT a GitHub identity (empty gh config)" >&2
-    GH_CONFIG_DIR="$(mktemp -d)"; export GH_CONFIG_DIR
-    export GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0="credential.https://github.com.helper" GIT_CONFIG_VALUE_0=""
-    unset GH_TOKEN GITHUB_TOKEN
-  fi
-  exec claude --model default --permission-mode auto --allow-dangerously-skip-permissions \
+agi() {
+  PATH=/opt/homebrew/bin:$PATH claude --model default --permission-mode auto --allow-dangerously-skip-permissions \
     --append-system-prompt "$(cat <<EOF
 Session context:
 - Date: $(date '+%Y-%m-%d %H:%M %Z')
@@ -43,7 +31,7 @@ Session context:
 - Hostname: $(hostname -s)
 EOF
 )" "$@"
-)
+}
 alias skynet="agi --dangerously-skip-permissions"
 
 # Detect which `ls` flavor is in use
