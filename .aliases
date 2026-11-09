@@ -162,7 +162,14 @@ alias sshyolo="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -
 alias scpyolo="scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o GlobalKnownHostsFile=/dev/null"
 alias pdf2booklet='docker run --rm -v $(pwd):/data -w /data -u $(id -u):$(id -g) bookletimposer --no-gui --booklet'
 
-alias marked="open -a /Applications/Marked\ 2.app"
+# one `open` per file: a single `open -a` with several files opens none of them in Marked 2
+unalias marked 2>/dev/null
+marked() {
+  local f
+  for f in "$@"; do
+    open -g -a "Marked 2" "$f"
+  done
+}
 alias uuids="for i in {1..16}; do uuidgen | tr '[:upper:]' '[:lower:]'; done | column"
 alias hq="htmlq --pretty | bat --no-pager --language html"
 alias redirectstderr-stdout="echo use '2>&1'"
